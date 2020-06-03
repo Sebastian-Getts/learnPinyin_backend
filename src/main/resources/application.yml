@@ -6,11 +6,13 @@ server:
     remote-ip-header: x-forwarded-for
     protocol-header: x-forwarded-proto
     port-header: X-Forwarded-Port
-  use-forward-headers: true
 
 spring:
   application:
     name: learnPinyin
 
+  data:
+    mongodb:
+      uri: mongodb://182.92.172.134:27017/syllable
 
 

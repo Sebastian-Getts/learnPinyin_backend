@@ -23,6 +23,20 @@ public class CommonResult<T> {
         return this;
     }
 
+    public CommonResult<T> success() {
+        this.code = 200;
+        this.message = "success";
+        this.data = null;
+        return this;
+    }
+
+    public CommonResult<T> success(String message) {
+        this.code = 200;
+        this.message = message;
+        this.data = null;
+        return this;
+    }
+
     public CommonResult<T> fail(String message) {
         this.code = 300;
         this.message = message;
