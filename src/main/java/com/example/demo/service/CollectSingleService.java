@@ -2,7 +2,6 @@ package com.example.demo.service;
 
 import com.alibaba.fastjson.JSON;
 import com.example.demo.entities.CollectWords;
-import com.example.demo.entities.Collections;
 import com.example.demo.entities.CommonResult;
 import com.example.demo.entities.UserList;
 import lombok.extern.slf4j.Slf4j;
@@ -70,5 +69,45 @@ public class CollectSingleService {
         CommonResult<Collection<CollectWords>> commonResult = new CommonResult<>();
         commonResult.success(values);
         return commonResult;
+    }
+
+
+    /**
+     * 删除word
+     *
+     * @param collectWords 参见entities
+     * @return common result
+     */
+    public CommonResult<JSON> delete(CollectWords collectWords) {
+        CommonResult<JSON> commonResult = new CommonResult<>();
+        try {
+            UserList byId = mongoOperations.findById(collectWords.getOpenId(), UserList.class);
+            assert byId != null;
+            Map<String, CollectWords> items = byId.getItems();
+            items.remove(collectWords.getEncode());
+            byId.setItems(items);
+            mongoOperations.save(byId);
+            commonResult.success();
+        } catch (Exception e) {
+            e.printStackTrace();
+            commonResult.fail("数据库操作异常～");
+        }
+        return commonResult;
+    }
+
+    /**
+     * 删除所有words
+     *
+     * @param openId user weChat MiniProgram openId
+     * @return common result
+     */
+    public CommonResult<JSON> deleteAll(String openId) {
+        UserList byId = mongoOperations.findById(openId, UserList.class);
+        assert byId != null;
+        Map<String, CollectWords> items = byId.getItems();
+        items.clear();
+        byId.setItems(items);
+        mongoOperations.save(byId);
+        return new CommonResult<JSON>().success();
     }
 }

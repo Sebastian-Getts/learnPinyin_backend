@@ -1,17 +1,14 @@
 package com.example.demo.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.example.demo.entities.CollectWords;
 import com.example.demo.entities.CommonResult;
 import com.example.demo.service.CollectSingleService;
 import lombok.extern.slf4j.Slf4j;
-import org.checkerframework.checker.units.qual.C;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Collection;
-import java.util.List;
 
 @RestController
 @Slf4j
@@ -30,14 +27,39 @@ public class Collect {
     @PostMapping("word")
     public CommonResult<JSON> collectWord(@RequestBody CollectWords collectWords) {
         log.info("object from remote: {}", collectWords.toString());
-        CommonResult<JSON> commonResult = new CommonResult<>();
-        commonResult = collectSingleService.insert(collectWords);
-        return commonResult;
+        return collectSingleService.insert(collectWords);
     }
 
+    /**
+     * 查询用户名下word个数
+     *
+     * @param openId 用户openId，唯一标识
+     * @return common result
+     */
     @GetMapping("word/{openId}")
-    public CommonResult<Collection<CollectWords>> getWords(@PathVariable() String openId) {
+    public CommonResult<Collection<CollectWords>> getWords(@PathVariable("openId") String openId) {
         return collectSingleService.query(openId);
     }
 
+    /**
+     * 删除单个word
+     *
+     * @param collectWords reference collectWords entity
+     * @return common result
+     */
+    @PostMapping("wordMinus")
+    public CommonResult<JSON> deleteWords(@RequestBody CollectWords collectWords) {
+        return collectSingleService.delete(collectWords);
+    }
+
+    /**
+     * 删除用户所有的words
+     *
+     * @param openId user openId
+     * @return common result
+     */
+    @DeleteMapping("word/{openId}")
+    public CommonResult<JSON> deleteWordsAll(@PathVariable("openId") String openId) {
+        return collectSingleService.deleteAll(openId);
+    }
 }
