@@ -15,5 +15,5 @@ public class CollectWords implements Collections{
     private String openId;
     private String word;
     private String encode;
-    private String phoneticize;
+    private String phonetic;
 }

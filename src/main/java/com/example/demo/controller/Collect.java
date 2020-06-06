@@ -5,10 +5,12 @@ import com.example.demo.entities.CollectWords;
 import com.example.demo.entities.CommonResult;
 import com.example.demo.service.CollectSingleService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Collection;
+import java.util.Map;
 
 @RestController
 @Slf4j
@@ -25,19 +27,23 @@ public class Collect {
      * @return common result
      */
     @PostMapping("word")
-    public CommonResult<JSON> collectWord(@RequestBody CollectWords collectWords) {
+    public CommonResult<String> collectWord(@RequestBody CollectWords collectWords) {
         log.info("object from remote: {}", collectWords.toString());
         return collectSingleService.insert(collectWords);
     }
 
     /**
-     * 查询用户名下word个数
+     * 查询用户名下word清单
      *
-     * @param openId 用户openId，唯一标识
+     * @param map 存放用户openId，唯一标识
      * @return common result
      */
-    @GetMapping("word/{openId}")
-    public CommonResult<Collection<CollectWords>> getWords(@PathVariable("openId") String openId) {
+    @PostMapping("wordList")
+    public CommonResult<Collection<CollectWords>> getWords(@RequestBody Map<String, Object> map) {
+        if (StringUtils.isEmpty(map)) {
+            return new CommonResult<Collection<CollectWords>>().fail("获取openid异常~");
+        }
+        String openId = (String) map.get("openId");
         return collectSingleService.query(openId);
     }
 

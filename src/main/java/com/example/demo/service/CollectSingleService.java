@@ -12,6 +12,10 @@ import org.springframework.util.StringUtils;
 import javax.annotation.Resource;
 import java.util.*;
 
+/**
+ * @author sebastian
+ * @date 2020/6/7 0:11
+ */
 @Slf4j
 @Service
 public class CollectSingleService {
@@ -25,28 +29,28 @@ public class CollectSingleService {
      * @param collectWords 参见实体类
      * @return 参见common result  实体类
      */
-    public CommonResult<JSON> insert(CollectWords collectWords) {
-        CommonResult<JSON> commonResult = new CommonResult<>();
+    public CommonResult<String> insert(CollectWords collectWords) {
+        CommonResult<String> commonResult = new CommonResult<>();
         try {
             UserList byId = mongoOperations.findById(collectWords.getOpenId(), UserList.class);
             if (StringUtils.isEmpty(byId)) {
                 UserList list = new UserList();
                 list.setOpenId(collectWords.getOpenId());
-                Map<String, CollectWords> map = new HashMap<>();
+                Map<String, CollectWords> map = new HashMap<>(16);
                 map.put(collectWords.getEncode(), collectWords);
                 list.setItems(map);
                 mongoOperations.save(list);
             } else {
                 Map<String, CollectWords> items = byId.getItems();
                 if (items.containsKey(collectWords.getEncode())) {
-                    commonResult.fail("The word has already existed!!!");
+                    commonResult.fail("收藏的汉字已存在！");
                     return commonResult;
                 }
                 items.put(collectWords.getEncode(), collectWords);
                 byId.setItems(items);
                 mongoOperations.save(byId);
             }
-            commonResult.success();
+            commonResult.success("收藏成功！");
         } catch (Exception e) {
             e.printStackTrace();
             commonResult.fail("System error");

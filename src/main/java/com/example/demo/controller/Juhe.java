@@ -5,10 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.demo.service.JuHeService;
 import com.example.demo.entities.CommonResult;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.net.URISyntaxException;
@@ -32,7 +29,7 @@ public class Juhe {
         object.put("month", month);
         object.put("day", day);
 
-        return juheService.invoke("history",object);
+        return juheService.invoke("history", object);
     }
 
     @GetMapping("dictionary/{word}")
