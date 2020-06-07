@@ -32,14 +32,13 @@ public class HttpRequest {
         HttpClient client = HttpClientBuilder.create().build();
         URIBuilder uriBuilder = new URIBuilder(url);
         if (parameters != null) {
-            for (Map.Entry entry : parameters.entrySet()) {
-                uriBuilder.addParameter(entry.getKey().toString(), entry.getValue().toString());
+            for (Map.Entry<String, Object> entry : parameters.entrySet()) {
+                uriBuilder.addParameter(entry.getKey(), entry.getValue().toString());
             }
         }
         HttpGet httpGet = new HttpGet(uriBuilder.build());
         HttpResponse response = null;
         try {
-            log.info("======start to invoke...");
             response = client.execute(httpGet);
         } catch (IOException e) {
             log.info("====请求异常~");

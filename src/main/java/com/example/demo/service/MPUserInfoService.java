@@ -22,14 +22,8 @@ public class MPUserInfoService {
     HttpRequest httpRequest;
 
     public CommonResult<JSON> commit(String code) throws URISyntaxException {
-        log.info("============this is Logger============");
-
         String url = "https://api.weixin.qq.com/sns/jscode2session?appid=" + MiniProgramInfoConfig.getAppId() +
                 "&secret=" + MiniProgramInfoConfig.getAppSecret() + "&js_code=" + code + "&grant_type=authorization_code";
-        log.info("===========url: " + url);
-        CommonResult<JSON> commonResult = httpRequest.httpGet(null, url);
-        JSON data = commonResult.getData();
-        log.info("============response: " + data.toJSONString());
-        return commonResult;
+        return httpRequest.httpGet(null, url);
     }
 }

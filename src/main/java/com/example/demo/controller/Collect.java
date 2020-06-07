@@ -12,6 +12,10 @@ import javax.annotation.Resource;
 import java.util.Collection;
 import java.util.Map;
 
+/**
+ * @author sebastian
+ * @date 07/06/2020 22:00
+ */
 @RestController
 @Slf4j
 @RequestMapping("collect")
