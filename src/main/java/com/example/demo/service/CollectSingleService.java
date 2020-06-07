@@ -32,10 +32,10 @@ public class CollectSingleService {
     public CommonResult<String> insert(CollectWords collectWords) {
         CommonResult<String> commonResult = new CommonResult<>();
         try {
-            UserList byId = mongoOperations.findById(collectWords.getOpenId(), UserList.class);
+            UserList byId = mongoOperations.findById(collectWords.getOpenid(), UserList.class);
             if (StringUtils.isEmpty(byId)) {
                 UserList list = new UserList();
-                list.setOpenId(collectWords.getOpenId());
+                list.setOpenId(collectWords.getOpenid());
                 Map<String, CollectWords> map = new HashMap<>(16);
                 map.put(collectWords.getEncode(), collectWords);
                 list.setItems(map);
@@ -61,20 +61,23 @@ public class CollectSingleService {
     /**
      * 查询数据
      *
-     * @param openId 用户openId
+     * @param openid 用户openid
      * @return data中为数据集合
      */
-    public CommonResult<Collection<CollectWords>> query(String openId) {
-        UserList byId = mongoOperations.findById(openId, UserList.class);
-        Collection<CollectWords> values = null;
+    public CommonResult<Collection<CollectWords>> query(String openid) {
+        UserList byId = mongoOperations.findById(openid, UserList.class);
+        Collection<CollectWords> values;
+        CommonResult<Collection<CollectWords>> commonResult = new CommonResult<>();
         if (byId != null) {
             values = byId.getItems().values();
+            List<CollectWords> list = new ArrayList<>(values);
+            list.sort((o1, o2) -> o2.getTimestamp().compareTo(o1.getTimestamp()));
+            commonResult.success(list);
+        } else {
+            commonResult.success(null);
         }
-        CommonResult<Collection<CollectWords>> commonResult = new CommonResult<>();
-        commonResult.success(values);
         return commonResult;
     }
-
 
     /**
      * 删除word
@@ -85,7 +88,7 @@ public class CollectSingleService {
     public CommonResult<JSON> delete(CollectWords collectWords) {
         CommonResult<JSON> commonResult = new CommonResult<>();
         try {
-            UserList byId = mongoOperations.findById(collectWords.getOpenId(), UserList.class);
+            UserList byId = mongoOperations.findById(collectWords.getOpenid(), UserList.class);
             assert byId != null;
             Map<String, CollectWords> items = byId.getItems();
             items.remove(collectWords.getEncode());
@@ -105,13 +108,17 @@ public class CollectSingleService {
      * @param openId user weChat MiniProgram openId
      * @return common result
      */
-    public CommonResult<JSON> deleteAll(String openId) {
+    public CommonResult<String> deleteAll(String openId) {
         UserList byId = mongoOperations.findById(openId, UserList.class);
         assert byId != null;
         Map<String, CollectWords> items = byId.getItems();
+        if (items.isEmpty()) {
+            log.info("========already empty !!!");
+            return new CommonResult<String>().fail("没有收藏的文字哦！");
+        }
         items.clear();
         byId.setItems(items);
         mongoOperations.save(byId);
-        return new CommonResult<JSON>().success();
+        return new CommonResult<String>().success("清除成功！");
     }
 }

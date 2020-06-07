@@ -43,8 +43,8 @@ public class Collect {
         if (StringUtils.isEmpty(map)) {
             return new CommonResult<Collection<CollectWords>>().fail("获取openid异常~");
         }
-        String openId = (String) map.get("openId");
-        return collectSingleService.query(openId);
+        String openid = (String) map.get("openid");
+        return collectSingleService.query(openid);
     }
 
     /**
@@ -61,11 +61,15 @@ public class Collect {
     /**
      * 删除用户所有的words
      *
-     * @param openId user openId
+     * @param map storage user openId
      * @return common result
      */
-    @DeleteMapping("word/{openId}")
-    public CommonResult<JSON> deleteWordsAll(@PathVariable("openId") String openId) {
-        return collectSingleService.deleteAll(openId);
+    @PostMapping("wordMinusAll")
+    public CommonResult<String> deleteWordsAll(@RequestBody Map<String, Object> map) {
+        if (StringUtils.isEmpty(map)) {
+            return new CommonResult<String>().fail("获取openid异常~");
+        }
+        String openid = (String) map.get("openid");
+        return collectSingleService.deleteAll(openid);
     }
 }

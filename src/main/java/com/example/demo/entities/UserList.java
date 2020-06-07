@@ -9,6 +9,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Map;
 
+
+/**
+ * @author sebastian
+ * @date 2020/6/7 11:18
+ */
 @Document
 @Getter
 @Setter
