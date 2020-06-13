@@ -6,6 +6,8 @@ import com.example.demo.entities.CommonResult;
 import com.example.demo.entities.UserList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.query.CriteriaDefinition;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -120,5 +122,16 @@ public class CollectSingleService {
         byId.setItems(items);
         mongoOperations.save(byId);
         return new CommonResult<String>().success("清除成功！");
+    }
+
+    /**
+     * 获取所有用户的数量
+     *
+     * @return list
+     */
+    public CommonResult<Object> getAllUsers() {
+        List<UserList> all = mongoOperations.findAll(UserList.class);
+        log.info("all users count: {}", all.size());
+        return new CommonResult<>().success(all);
     }
 }

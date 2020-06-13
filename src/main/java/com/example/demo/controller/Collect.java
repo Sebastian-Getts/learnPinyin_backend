@@ -76,4 +76,9 @@ public class Collect {
         String openid = (String) map.get("openid");
         return collectSingleService.deleteAll(openid);
     }
+
+    @GetMapping("allUsers")
+    public CommonResult<Object> getAllUsers(){
+        return collectSingleService.getAllUsers();
+    }
 }
