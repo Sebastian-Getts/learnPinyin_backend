@@ -77,8 +77,41 @@ public class Collect {
         return collectSingleService.deleteAll(openid);
     }
 
+    @PostMapping("deleteByMonth")
+    public CommonResult<String> deleteWordsByMonth(@RequestBody Map<String, Object> map) {
+        if (StringUtils.isEmpty(map)) {
+            return new CommonResult<String>().fail("获取信息异常~");
+        }
+        String openid = (String) map.get("openid");
+        String month = (String) map.get("month");
+        String year = (String) map.get("year");
+        return collectSingleService.deleteByMonth(year, month, openid);
+    }
+
+    /**
+     * 获取所有用户
+     *
+     * @return 用户列表
+     */
     @GetMapping("allUsers")
-    public CommonResult<Object> getAllUsers(){
+    public CommonResult<Object> getAllUsers() {
         return collectSingleService.getAllUsers();
+    }
+
+    /**
+     * 按月查询
+     *
+     * @param map 日期、openid
+     * @return CollectWords
+     */
+    @PostMapping("filterWordByMonth")
+    public CommonResult<Collection<CollectWords>> wordsByMonth(@RequestBody Map<String, Object> map) {
+        if (!map.isEmpty()) {
+            String year = (String) map.get("year");
+            String month = (String) map.get("month");
+            String openid = (String) map.get("openid");
+            return collectSingleService.getWordsByMonth(year, month, openid);
+        }
+        return new CommonResult<Collection<CollectWords>>().fail("Input error.");
     }
 }

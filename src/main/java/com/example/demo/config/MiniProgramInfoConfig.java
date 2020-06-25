@@ -5,7 +5,7 @@ package com.example.demo.config;
  * @date 2020/6/6 22:48
  */
 public class MiniProgramInfoConfig {
-    public static String getKEY() {
+    public static String getKey() {
         return KEY;
     }
 
@@ -23,9 +23,9 @@ public class MiniProgramInfoConfig {
 
     private static final String KEY = "商户的api秘钥";
 
-    private static final String APP_ID = "wxad52309b82fd0e93";
+    private static final String APP_ID = "your app id";
 
     private static final String MCH_ID = "商户号";
 
-    private static final String APP_SECRET = "6034ff02ba2ea79c0ecd76c8d1e45a14";
+    private static final String APP_SECRET = "your app secret";
 }

@@ -6,8 +6,6 @@ import com.example.demo.entities.CommonResult;
 import com.example.demo.entities.UserList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.query.CriteriaDefinition;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -82,7 +80,7 @@ public class CollectSingleService {
     }
 
     /**
-     * 删除word
+     * 删除单个word
      *
      * @param collectWords 参见entities
      * @return common result
@@ -125,6 +123,35 @@ public class CollectSingleService {
     }
 
     /**
+     * 按月份删除文字
+     *
+     * @param year   年份
+     * @param month  月
+     * @param openid openid
+     * @return success or fail
+     */
+    public CommonResult<String> deleteByMonth(String year, String month, String openid) {
+        CommonResult<Collection<CollectWords>> query = query(openid);
+        Collection<CollectWords> data = query.getData();
+        Iterator<CollectWords> iterator = data.iterator();
+        while (iterator.hasNext()) {
+            CollectWords next = iterator.next();
+            String timestamp = next.getTimestamp();
+            if (Integer.parseInt(timestamp.substring(0, 4)) == Integer.parseInt(year) &&
+                    Integer.parseInt(timestamp.substring(5, 7)) == Integer.parseInt(month)) {
+                iterator.remove();
+            }
+        }
+        try {
+            mongoOperations.save(query);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new CommonResult<String>().fail("清空时异常");
+        }
+        return new CommonResult<String>().success("清空成功");
+    }
+
+    /**
      * 获取所有用户的数量
      *
      * @return list
@@ -133,5 +160,34 @@ public class CollectSingleService {
         List<UserList> all = mongoOperations.findAll(UserList.class);
         log.info("all users count: {}", all.size());
         return new CommonResult<>().success(all);
+    }
+
+    /**
+     * 根据月份查询
+     *
+     * @param year   年
+     * @param month  月
+     * @param openid 小程序openid
+     * @return CollectWords
+     */
+    public CommonResult<Collection<CollectWords>> getWordsByMonth(String year, String month, String openid) {
+        CommonResult<Collection<CollectWords>> query = query(openid);
+        if (query.getCode() != 200) {
+            return query;
+        }
+        Collection<CollectWords> data = query.getData();
+        Iterator<CollectWords> iterator = data.iterator();
+        while (iterator.hasNext()) {
+            CollectWords next = iterator.next();
+            System.out.println(next.getTimestamp());
+
+            String timestamp = next.getTimestamp();
+            // 年份符合、月份超出时不符合
+            if (Integer.parseInt(timestamp.substring(0, 4)) != Integer.parseInt(year) ||
+                    Integer.parseInt(timestamp.substring(5, 7)) != Integer.parseInt(month)) {
+                iterator.remove();
+            }
+        }
+        return query;
     }
 }
