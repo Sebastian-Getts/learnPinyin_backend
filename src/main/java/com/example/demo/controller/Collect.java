@@ -32,7 +32,7 @@ public class Collect {
      */
     @PostMapping("word")
     public CommonResult<String> collectWord(@RequestBody CollectWords collectWords) {
-        log.info("object from remote: {}", collectWords.toString());
+        log.debug("object from remote: {}", collectWords.toString());
         return collectSingleService.insert(collectWords);
     }
 

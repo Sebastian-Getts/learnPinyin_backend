@@ -40,7 +40,7 @@ public class AesConfig {
 //            Method method = target.getClass().getMethod(signature.getName(), signature.getParameterTypes());
 //            Aes aes = method.getAnnotation(Aes.class);
 //            if (StringUtils.isEmpty(args)) {
-//                log.info("{} has no args", proceedingJoinPoint.getSignature().getName());
+//                log.debug("{} has no args", proceedingJoinPoint.getSignature().getName());
 //            } else {
 //                String data = (String) args[0];
 //                AesUtil.desEncrypt(data);
@@ -49,7 +49,7 @@ public class AesConfig {
 //            result = (CommonResult<JSON>) proceedingJoinPoint.proceed(args);
 //
 //            if (aes.encryptOutput()) {
-//                log.info("{} needs to encrypt its output...", proceedingJoinPoint.getSignature().getName());
+//                log.debug("{} needs to encrypt its output...", proceedingJoinPoint.getSignature().getName());
 //            }
         } catch (Throwable e) {
             e.printStackTrace();

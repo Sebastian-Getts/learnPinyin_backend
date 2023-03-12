@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 
 import com.alibaba.fastjson.JSON;
+import com.example.demo.entities.WordDetail;
 import com.example.demo.service.PickOneService;
 import com.example.demo.entities.CommonResult;
 import com.example.demo.utils.annotations.Aes;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,7 +27,7 @@ public class PickOne {
     PickOneService pickOneService;
 
     @GetMapping("/word/{count}")
-    public CommonResult<JSON> oneWord(@PathVariable("count") int count) {
+    public CommonResult<List<WordDetail>> oneWord(@PathVariable("count") int count) {
 
         return pickOneService.invoke(count);
     }

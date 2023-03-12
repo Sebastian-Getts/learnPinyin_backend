@@ -1,6 +1,5 @@
 package com.example.demo.entities;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +14,7 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-public class CollectWords implements Collections {
+public class CollectWords {
     private String openid;
     private String word;
     private String encode;

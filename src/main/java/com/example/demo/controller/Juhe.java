@@ -11,6 +11,8 @@ import javax.annotation.Resource;
 import java.net.URISyntaxException;
 
 /**
+ * "聚合接口"提供服务
+ *
  * @author sebastian
  * @date 2020/5/10 21:39
  */
@@ -24,7 +26,6 @@ public class Juhe {
 
     @GetMapping("history/{month}/{day}")
     public CommonResult<JSON> history(@PathVariable("month") String month, @PathVariable("day") String day) throws URISyntaxException {
-        log.info("===============history controller...");
         JSONObject object = new JSONObject();
         object.put("month", month);
         object.put("day", day);
@@ -34,7 +35,6 @@ public class Juhe {
 
     @GetMapping("dictionary/{word}")
     public CommonResult<JSON> dictionary(@PathVariable("word") String word) throws URISyntaxException {
-        log.info("=========dictionary controller...");
         JSONObject object = new JSONObject();
         object.put("word", word);
         return juheService.invoke("dictionary", object);

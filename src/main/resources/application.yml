@@ -2,17 +2,17 @@ server:
   port: 8001
   servlet:
     context-path: "/learnPinyin"
-  tomcat:
-    remote-ip-header: x-forwarded-for
-    protocol-header: x-forwarded-proto
-    port-header: X-Forwarded-Port
+#  tomcat:
+#    remote-ip-header: x-forwarded-for
+#    protocol-header: x-forwarded-proto
+#    port-header: X-Forwarded-Port
 
 spring:
   application:
     name: learnPinyin
 
-  data:
-    mongodb:
-      uri: mongodb://182.92.172.134:27017/syllable
+#  data:
+#    mongodb:
+#      uri: mongodb://182.92.172.134:27017/syllable
 
 

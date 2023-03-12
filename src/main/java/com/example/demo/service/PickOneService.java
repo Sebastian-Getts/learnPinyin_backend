@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.example.demo.entities.CommonResult;
+import com.example.demo.entities.WordDetail;
 import com.github.stuxuhai.jpinyin.PinyinException;
 import com.github.stuxuhai.jpinyin.PinyinFormat;
 import com.github.stuxuhai.jpinyin.PinyinHelper;
@@ -25,13 +26,9 @@ public class PickOneService {
     private final static String[] R_BASE = {"0", "1", "2", "3", "4", "5", "6", "7", "8",
             "9", "a", "b", "c", "d", "e", "f"};
 
-    public CommonResult<JSON> invoke(int count) {
-
-        JSONObject object = new JSONObject();
+    public CommonResult<List<WordDetail>> invoke(int count) {
         Random random = new Random();
-        List<Map<String, Object>> wordList = new ArrayList<>();
-        CommonResult<JSON> commonResult = new CommonResult<>();
-
+        List<WordDetail> wordList = new ArrayList<>();
         for (int i = 0; i < count; i++) {
             // 生成第1位的区码，11到14之间的随机数
             int r1 = random.nextInt(3) + 11;
@@ -98,24 +95,21 @@ public class PickOneService {
 
             }
             log.info("生成汉字:" + word);
-            String encode = URLEncoder.encode(word, StandardCharsets.UTF_8);
+            String encode;
+            try {
+                encode = URLEncoder.encode(word, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException(e);
+            }
             log.info("UTF-8: " + encode);
-            Map<String, Object> wordwrap = new HashMap<>(16);
-            wordwrap.put("word", word);
-            wordwrap.put("pinyin", pinyin);
-            wordwrap.put("phonetic", phonetic);
-            wordwrap.put("encode", encode);
-            wordList.add(wordwrap);
-
+            WordDetail wordDetail = new WordDetail();
+            wordDetail.setEncode(encode)
+                    .setPhonetic(phonetic)
+                    .setWord(word)
+                    .setPinyin(pinyin);
+            wordList.add(wordDetail);
         }
-        object.put("wordList", wordList);
-        object.put("statusCode", "0");
 
-        return commonResult.success(object);
-    }
-
-    public static void main(String[] args) {
-//        CommonResult<JSON> invoke = invoke(5);
-//        System.out.println(invoke.toString());
+        return new CommonResult<List<WordDetail>>().success(wordList);
     }
 }

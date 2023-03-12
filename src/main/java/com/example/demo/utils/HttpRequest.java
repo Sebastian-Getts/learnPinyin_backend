@@ -41,7 +41,7 @@ public class HttpRequest {
         try {
             response = client.execute(httpGet);
         } catch (IOException e) {
-            log.info("====请求异常~");
+            log.debug("====请求异常~");
             e.printStackTrace();
             res.fail("请求异常~");
         }
